@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#061634"><meta name="description" content="把珍贵的瞬间挂进星光里。一棵可以用手势触碰、收藏照片的圣诞树。"><title>Christmas Memories · 星光圣诞树</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<main id="world" aria-label="可旋转的三维星光圣诞树"></main>
+<div class="vignette"></div>
+<header class="chrome"><div class="wordmark"><span class="tiny-star">✧</span><div>CHRISTMAS MEMORIES<span class="wordmark-sub">每一束星光，都藏着一个你。</span></div></div><div class="top-actions"><button id="music" class="icon-button" aria-label="播放圣诞音乐" title="圣诞音乐">♫</button><button id="immersive" class="icon-button" aria-label="进入沉浸模式" title="沉浸模式">⛶</button></div></header>
+<div class="greeting chrome"><p>A LITTLE MAGIC, JUST FOR YOU</p><h1>Merry<br><em>Christmas</em></h1><div class="greeting-line"></div><p class="wish">把喜欢的人和瞬间，<br>都收藏在这棵树里。</p></div>
+<div class="corner-note chrome"><span>✦</span> MAKE A MEMORY<br><small>让回忆，在星光里闪闪发亮</small></div>
+<footer class="chrome"><p class="hint" id="hint">拖动旋转 · 滚轮缩放 · 点击照片放大</p><nav class="toolbar" aria-label="圣诞树操作"><button id="form" class="active" aria-pressed="true"><span>✧</span> 圣诞树</button><button id="scatter" aria-pressed="false"><span>✦</span> 星光散开</button><span class="divider"></span><button id="photos"><span>▧</span> 放入照片 <span id="photo-count" class="count">0</span></button><button id="gesture"><span>♧</span> 手势魔法</button><span class="divider extra"></span><button id="rotate" class="extra" aria-pressed="true" title="切换自动旋转"><span>⟳</span> 自动旋转</button></nav><p class="privacy">YOUR MOMENTS, YOUR LITTLE UNIVERSE</p></footer>
+<button id="exit-immersive" hidden>退出沉浸</button>
+<div id="loading"><span class="loading-star">✦</span><p>正在点亮你的圣诞树</p></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input id="file-input" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden>
+<dialog id="gallery"><div class="panel-head"><div><p class="eyebrow">OUR LITTLE MEMORIES</p><h2>把回忆挂上树梢</h2></div><button class="close" id="close-gallery" aria-label="关闭照片面板">×</button></div><p class="panel-copy">选择喜欢的照片，它们会变成树上的金色相框。<br>照片仅保存在当前浏览器中，不会上传。</p><button id="upload" class="gold-button">＋ 选择照片</button><p id="gallery-feedback" class="panel-copy" role="status" hidden></p><p id="gallery-empty" class="empty">树上目前挂着示例插画，等你放入自己的回忆。</p><div id="photo-grid"></div><p class="fine">支持 JPG、PNG、WebP、AVIF · 最多 36 张 · 单张不超过 15 MB<br>请保留原始照片；清理浏览器数据会移除本地回忆。</p></dialog>
+<dialog id="memory"><button class="close" id="close-memory" aria-label="关闭照片">×</button><div class="photo-frame"><img id="memory-img" alt="圣诞树上的回忆"></div><p id="memory-caption"></p><div class="memory-nav"><button id="previous">上一张</button><span>✦</span><button id="next">下一张</button></div></dialog>
+<dialog id="gesture-help"><button class="close" id="close-help" aria-label="关闭手势说明">×</button><p class="eyebrow">A TOUCH OF MAGIC</p><h2>用手心，唤醒星光</h2><p class="panel-copy">允许摄像头后，把一只手放在镜头前。<br>明亮的环境、完整的手掌，会更容易识别。</p><div class="gesture-list"><div><b>张开手掌</b><span>星光缓缓散开</span></div><div><b>轻轻握拳</b><span>重新聚成圣诞树</span></div><div><b>左右移动</b><span>转动你的圣诞树</span></div><div><b>拇指食指捏合</b><span>打开一张照片</span></div></div><button id="start-camera" class="gold-button">开启摄像头</button><p id="camera-feedback" class="panel-copy" role="status" hidden></p><p class="fine">画面与手势识别均在设备内处理，不上传。<br>也可以随时用鼠标、触屏和下方按钮操作。</p></dialog>
+<aside id="camera-panel" hidden><video id="camera" autoplay playsinline muted disablepictureinpicture></video><canvas id="hand-overlay"></canvas><div><span id="camera-status">正在连接摄像头</span><button id="stop-camera" aria-label="关闭摄像头">×</button></div><label id="camera-device-row" hidden>切换摄像头<select id="camera-device" aria-label="切换摄像头"></select></label><p id="camera-warning" role="status" hidden></p></aside>
+<script type="module" src="app.js"></script>
+</body></html>
