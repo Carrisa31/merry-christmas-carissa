@@ -1,8 +1,8 @@
-# Christmas Memories · 星光圣诞树
+# Merry Christmas Carissa · 星光圣诞树
 
 Carrisa31 的开源互动圣诞树：金色粒子、红金挂饰、照片相框与摄像头手势。
 
-在线体验：https://carrisa31.github.io/christmas-memory-tree/
+在线体验：https://carrisa31.github.io/merry-christmas-carissa/
 
 ## 功能
 
