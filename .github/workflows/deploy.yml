@@ -4,38 +4,21 @@ on:
     branches: [main]
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 concurrency:
   group: christmas-pages
   cancel-in-progress: false
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.site.outputs.page_url }}
     steps:
-      - name: Check out project
+      - name: Check out source
         uses: actions/checkout@v4
-      - name: Import initial source
-        if: hashFiles('index.html') == ''
-        shell: bash
-        run: |
-          curl --fail --location --retry 3 --output /tmp/christmas-site.zip 'https://carissa-christmas-memories.fond-mint-1211.chatgpt.site/downloads/christmas-site.zip'
-          echo '5426cce025bcc94c63482904152b51ff2924a6ef90fcc79e661af2d5bc050b17  /tmp/christmas-site.zip' | sha256sum --check
-          unzip -q /tmp/christmas-site.zip -d .
-          echo 'IyBDaHJpc3RtYXMgTWVtb3JpZXMgwrcg5pif5YWJ5Zyj6K+e5qCRCgpDYXJyaXNhMzEg55qE5byA5rqQ5LqS5Yqo5Zyj6K+e5qCR77ya6YeR6Imy57KS5a2Q44CB57qi6YeR5oyC6aWw44CB54Wn54mH55u45qGG5LiO5pGE5YOP5aS05omL5Yq/44CCCgrlnKjnur/kvZPpqozvvJpodHRwczovL2NhcnJpc2EzMS5naXRodWIuaW8vY2hyaXN0bWFzLW1lbW9yeS10cmVlLwoKIyMg5Yqf6IO9CgotIOm8oOagh+aLluWKqOaIluinpuWxj+aXi+i9rO+8m+a7mui9ruaIluWPjOaMh+e8qeaUvuOAggotIOaYn+WFieaVo+W8gOS4juWco+ivnuagkeiBmuWQiOOAggotIOWvvOWFpeeFp+eJh+W5tueCueWHu+ebuOahhuaUvuWkp++8m+acgOWkmiAzNiDlvKDvvIzljZXlvKDkuI3otoXov4cgMTUgTULjgIIKLSDmkYTlg4/lpLTmiYvlir/vvJrlvKDlvIDmlaPlvIDjgIHmj6Hmi7PogZrlkIjjgIHlt6blj7Pnp7vliqjml4vovazjgIHmjY/lkIjmn6XnnIvnhafniYfjgIIKLSDmkYTlg4/lpLTpgInmi6njgIHmnYPpmZDkuI7pu5HlsY/mj5DnpLrjgIHliqDovb3otoXml7blpITnkIbjgIIKLSDmnKzlnLDlkIjmiJDpk4Plo7DjgIHmsonmtbjmqKHlvI/jgIHmiYvmnLrlkozlubPmnb/luIPlsYDjgIIKCiMjIOS9v+eUqOS4jumakOengQoK6K6/5a6i5peg6ZyA5a6J6KOF5oiW55m75b2VIEdQVOOAguivt+S9v+eUqOaUr+aMgSBXZWJHTCDnmoTnjrDku6MgQ2hyb21l44CBRWRnZSDmiJYgU2FmYXJp44CCCgrnhafniYfku4XlrZjkuo7lr7zlhaXml7bnmoTmtY/op4jlmaggSW5kZXhlZERC77yM5LiN5LiK5Lyg77yM5Lmf5LiN5Lya5o+Q5Lqk5Yiw5YWs5byA5LuT5bqT44CC5riF55CG56uZ54K55pWw5o2u5Lya56e76Zmk54Wn54mH77yM6K+35L+d55WZ5Y6f5Zu+44CCCgrmkYTlg4/lpLTnlLvpnaLlnKjorr7lpIflhoXlpITnkIbvvIzkuI3kvb/nlKjpuqblhYvpo47jgILpppbmrKHkvb/nlKjpnIDopoHlhYHorrjnm7jmnLrvvJvlupTnlKjlhoXmtY/op4jlmajlj6/og73pmZDliLbnm7jmnLrvvIzlu7rorq7kvb/nlKjns7vnu5/mtY/op4jlmajjgILniannkIbpga7mjKHnm5blkozns7vnu5/pmpDnp4HlvIDlhbPpnIDopoHkvb/nlKjogIXmiZPlvIDjgIIKCuekuuS+i+WGrOaXpeaPkueUu+eUseeoi+W6j+e7mOWItu+8jOS4jeaYr+eUqOaIt+eFp+eJh+OAguaJi+WKv+aViOaenOWPluWGs+S6juWFieeFp+OAgemVnOWktOS9jee9ruWSjOiuvuWkh+aAp+iDveOAggoKIyMg5pys5Zyw5byA5Y+RCgrpnZnmgIEgSFRNTOOAgUNTU+OAgUphdmFTY3JpcHQg6aG555uu77yM5peg6ZyA5a6J6KOFIE5vZGUg5L6d6LWW44CC5YWL6ZqG5ZCO5Zyo6aG555uu55uu5b2V5omn6KGMIGBweXRob24gLW0gaHR0cC5zZXJ2ZXIgODA4MGDvvIzlho3miZPlvIAgaHR0cDovL2xvY2FsaG9zdDo4MDgwIOOAgue6v+S4iuivt+S9v+eUqCBIVFRQU+OAggoKIyMg6aG555uu57uT5p6ECgotIGluZGV4Lmh0bWzvvJrnlYzpnaLjgIIKLSBzdHlsZS5jc3PvvJrlk43lupTlvI/luIPlsYDjgIIKLSBhcHAuanPvvJrnspLlrZDjgIHnhafniYfjgIHmiYvlir/lj4rkuqTkupLjgIIKLSB2ZW5kb3Iv77ya5pys5ZywIDNEIOW6k+OAgeivhuWIq+e7hOS7tuS4juaooeWei+OAggotIC5naXRodWIvd29ya2Zsb3dzL2RlcGxveS55bWzvvJroh6rliqjlj5HluIPphY3nva7jgIIKCiMjIOmDqOe9sgoKU2V0dGluZ3Mg4oaSIFBhZ2VzIOmAieaLqSBHaXRIdWIgQWN0aW9uc++8jOS/ruaUuSBtYWluIOWIhuaUr+WQjuiHquWKqOWPkeW4g+OAgummluasoea1geeoi+S7juW4piBTSEEtMjU2IOagoemqjOeahOWPkeW4g+WMheWvvOWFpeW5tuaPkOS6pOWujOaVtOa6kOegge+8m+S5i+WQjuebtOaOpeS9v+eUqOacrOS7k+W6k+a6kOegge+8jOi/kOihjOS4reeahOe9keermeS4jeS+nei1liBDaGF0R1BUIOWfn+WQjeOAggoKIyMg6K645Y+vCgrpobnnm67oh6rouqvku6PnoIHkuI7npLrkvovmj5LnlLvph4fnlKggTUlUIOiuuOWPr+ivge+8jENvcHlyaWdodCAoYykgMjAyNiBDYXJyaXNhMzHjgILnrKzkuInmlrnnu4Tku7bkv53nlZnljp/orrjlj6/vvJpUaHJlZS5qcyDkuLogTUlU77ybTWVkaWFQaXBlIOiuuOWPr+ingSB2ZW5kb3IvTUVESUFQSVBFLUxJQ0VOU0UudHh0IOWSjCB2ZW5kb3IvTUVESUFQSVBFLVJFQURNRS5tZOOAggoK6KeG6KeJ5Y+C6ICD55So5oi35o+Q5L6b55qE6KeG6aKR77yM5LiN5L+d6K+B5LiO5ouN5pGE55S76Z2i6YCQ5YOP57Sg5LiA6Ie044CC5pys6aG555uu5ZyoIEFJIOi+heWKqeS4i+W8gOWPkeOAggo=' | base64 --decode > README.md
-          echo 'TUlUIExpY2Vuc2UKCkNvcHlyaWdodCAoYykgMjAyNiBDYXJyaXNhMzEKClBlcm1pc3Npb24gaXMgaGVyZWJ5IGdyYW50ZWQsIGZyZWUgb2YgY2hhcmdlLCB0byBhbnkgcGVyc29uIG9idGFpbmluZyBhIGNvcHkKb2YgdGhpcyBzb2Z0d2FyZSBhbmQgYXNzb2NpYXRlZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgIlNvZnR3YXJlIiksIHRvIGRlYWwKaW4gdGhlIFNvZnR3YXJlIHdpdGhvdXQgcmVzdHJpY3Rpb24sIGluY2x1ZGluZyB3aXRob3V0IGxpbWl0YXRpb24gdGhlIHJpZ2h0cwp0byB1c2UsIGNvcHksIG1vZGlmeSwgbWVyZ2UsIHB1Ymxpc2gsIGRpc3RyaWJ1dGUsIHN1YmxpY2Vuc2UsIGFuZC9vciBzZWxsCmNvcGllcyBvZiB0aGUgU29mdHdhcmUsIGFuZCB0byBwZXJtaXQgcGVyc29ucyB0byB3aG9tIHRoZSBTb2Z0d2FyZSBpcwpmdXJuaXNoZWQgdG8gZG8gc28sIHN1YmplY3QgdG8gdGhlIGZvbGxvd2luZyBjb25kaXRpb25zOgoKVGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UgYW5kIHRoaXMgcGVybWlzc2lvbiBub3RpY2Ugc2hhbGwgYmUgaW5jbHVkZWQgaW4gYWxsCmNvcGllcyBvciBzdWJzdGFudGlhbCBwb3J0aW9ucyBvZiB0aGUgU29mdHdhcmUuCgpUSEUgU09GVFdBUkUgSVMgUFJPVklERUQgIkFTIElTIiwgV0lUSE9VVCBXQVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVTUyBPUgpJTVBMSUVELCBJTkNMVURJTkcgQlVUIE5PVCBMSU1JVEVEIFRPIFRIRSBXQVJSQU5USUVTIE9GIE1FUkNIQU5UQUJJTElUWSwKRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFCkFVVEhPUlMgT1IgQ09QWVJJR0hUIEhPTERFUlMgQkUgTElBQkxFIEZPUiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RIRVIKTElBQklMSVRZLCBXSEVUSEVSIElOIEFOIEFDVElPTiBPRiBDT05UUkFDVCwgVE9SVCBPUiBPVEhFUldJU0UsIEFSSVNJTkcgRlJPTSwKT1VUIE9GIE9SIElOIENPTk5FQ1RJT04gV0lUSCBUSEUgU09GVFdBUkUgT1IgVEhFIFVTRSBPUiBPVEhFUiBERUFMSU5HUyBJTiBUSEUKU09GVFdBUkUuCg==' | base64 --decode > LICENSE
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html app.js style.css vendor .nojekyll README.md LICENSE
-          if ! git diff --cached --quiet; then
-            git commit -m 'Publish complete Christmas tree source with MIT license'
-            git push origin HEAD:main
-          fi
-      - name: Prepare Pages
+      - name: Check JavaScript syntax
+        run: node --check app.js
+      - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Prepare website files
         run: |
@@ -43,10 +26,17 @@ jobs:
           cp index.html app.js style.css _site/
           cp -R vendor _site/vendor
           touch _site/.nojekyll
-      - name: Upload static website
+      - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.site.outputs.page_url }}
+    steps:
       - name: Publish website
         id: site
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
